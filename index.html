@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Planner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fde7ef;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    .form-card,
+    .list-card {
+      background: rgba(255, 251, 194, 0.681);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 18px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      background: black;
+      color: white;
+    }
+
+    .workout-item {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 14px;
+      margin-top: 12px;
+      background: #fafafa;
+    }
+
+    .workout-item p {
+      margin: 6px 0;
+    }
+
+    .delete-btn {
+      background: #d9534f;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Workout Planner</h1>
+    <p class="subtitle">Plan and track your workouts</p>
+
+    <div class="form-card">
+      <h2>Add a Workout</h2>
+
+      <label for="name">Workout Name</label>
+      <input type="text" id="name" placeholder="e.g. Push Day">
+
+      <label for="day">Day</label>
+      <input type="text" id="day" placeholder="e.g. Monday">
+
+      <label for="exercise">Exercise</label>
+      <input type="text" id="exercise" placeholder="e.g. Dumbbell Shoulder Press">
+
+      <label for="sets">Sets</label>
+      <input type="text" id="sets" placeholder="e.g. 3">
+
+      <label for="reps">Reps</label>
+      <input type="text" id="reps" placeholder="e.g. 10">
+
+      <button id="addWorkoutBtn">Add Workout</button>
+    </div>
+
+    <div class="list-card">
+      <h2>Saved Workouts</h2>
+      <div id="workoutList"></div>
+    </div>
+  </div>
+
+  <script>
+    let workouts = [];
+
+    const nameInput = document.getElementById("name");
+    const dayInput = document.getElementById("day");
+    const exerciseInput = document.getElementById("exercise");
+    const setsInput = document.getElementById("sets");
+    const repsInput = document.getElementById("reps");
+    const addWorkoutBtn = document.getElementById("addWorkoutBtn");
+    const workoutList = document.getElementById("workoutList");
+
+    function displayWorkouts() {
+      workoutList.innerHTML = "";
+
+      if (workouts.length === 0) {
+        workoutList.innerHTML = "<p>No workouts saved yet.</p>";
+        return;
+      }
+
+      for (let i = 0; i < workouts.length; i++) {
+        const workout = workouts[i];
+
+        const workoutDiv = document.createElement("div");
+        workoutDiv.className = "workout-item";
+
+        workoutDiv.innerHTML = `
+          <p><strong>Workout:</strong> ${workout.name}</p>
+          <p><strong>Day:</strong> ${workout.day}</p>
+          <p><strong>Exercise:</strong> ${workout.exercise}</p>
+          <p><strong>Sets:</strong> ${workout.sets}</p>
+          <p><strong>Reps:</strong> ${workout.reps}</p>
+          <button class="delete-btn" onclick="deleteWorkout(${i})">Delete</button>
+        `;
+
+        workoutList.appendChild(workoutDiv);
+      }
+    }
+
+    function addWorkout() {
+      const name = nameInput.value.trim();
+      const day = dayInput.value.trim();
+      const exercise = exerciseInput.value.trim();
+      const sets = setsInput.value.trim();
+      const reps = repsInput.value.trim();
+
+      if (name === "" || day === "" || exercise === "" || sets === "" || reps === "") {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const workout = {
+        name: name,
+        day: day,
+        exercise: exercise,
+        sets: sets,
+        reps: reps
+      };
+
+      workouts.push(workout);
+
+      nameInput.value = "";
+      dayInput.value = "";
+      exerciseInput.value = "";
+      setsInput.value = "";
+      repsInput.value = "";
+
+      displayWorkouts();
+    }
+
+    function deleteWorkout(index) {
+      workouts.splice(index, 1);
+      displayWorkouts();
+    }
+
+    addWorkoutBtn.addEventListener("click", addWorkout);
+    displayWorkouts();
+  </script>
+</body>
+</html>
